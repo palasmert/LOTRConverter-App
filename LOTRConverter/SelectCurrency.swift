@@ -9,7 +9,8 @@ import SwiftUI
 
 struct SelectCurrency: View {
     @Environment(\.dismiss) var dismiss
-    @State var selectedCurrency: Currency
+    @State var topCurrency: Currency
+    @State var bottomCurrency: Currency
     
     var body: some View {
         ZStack {
@@ -24,29 +25,13 @@ struct SelectCurrency: View {
                 Text("Select the currency you are starting: )")
                     .fontWeight(.bold)
                 // Currency icons
-                LazyVGrid(columns: [GridItem(), GridItem(), GridItem()]) {
-                    ForEach(Currency.allCases) { currency in
-                        if selectedCurrency == currency {
-                            CurrencyIcon(currencyImage: currency.image, currencyName: currency.name)
-                                .shadow(color: .black, radius: 20)
-                                .overlay {
-                                    RoundedRectangle(cornerRadius: 25)
-                                        .stroke(lineWidth: 3)
-                                        .opacity(0.4)
-                                }
-                        } else {
-                            CurrencyIcon(currencyImage: currency.image, currencyName: currency.name)
-                                .onTapGesture {
-                                    selectedCurrency = currency
-                                }
-                        }
-                    }
-                }
+                IconGrid(selectedCurrency: topCurrency)
                 
                 // Text2
                 Text("Select the currency you would like to convert to:")
                     .fontWeight(.bold)
                 // Currency icons2
+                IconGrid(selectedCurrency: bottomCurrency)
                 
                 // Done Btn
                 Button("Done") {
@@ -60,11 +45,12 @@ struct SelectCurrency: View {
             }
             .padding()
             .multilineTextAlignment(.center)
+            .foregroundStyle(.black)
             
         }//: ZSTACK
     }
 }
 
 #Preview {
-    SelectCurrency(selectedCurrency: .silverPenny)
+    SelectCurrency(topCurrency: .silverPenny, bottomCurrency: .goldPenny)
 }
